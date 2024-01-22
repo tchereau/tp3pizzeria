@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<!-- no php -->
+
+<head>
+    <title>Pizza</title>
+    <meta charset="utf-8">
+    <link href="https://unpkg.com/tailwindcss@1.0.4/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-200">
+    <header class="flex justify-center">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight dark:text-slate-200">Pizza</h1>
+    </header>
+    <nav class="mb-2">
+        <div class="flex justify-center">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2 mr-2"
+                onclick="showPizza()">Show Pizza</button>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded  ml-2 mr-2"
+                onclick="showAddPizza()">Add Pizza</button>
+        </div>
+    </nav>
+    <main class="items-center justify-center p-12">
+        <div id="menu1" class="flex container">
+            <table class="border-collapse w-full rounded">
+                <thead>
+                    <tr>
+                        <th
+                            class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">
+                            Code</th>
+                        <th
+                            class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">
+                            Name</th>
+                        <th
+                            class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">
+                            Price</th>
+                    </tr>
+                </thead>
+                <tbody id="pizzalist">
+                </tbody>
+            </table>
+        </div>
+        <div id="menu2" style="display: none;" class="flex">
+            <div class="mx-auto w-full max-w-[550px] bg-white container rounded">
+                <div class="py-6 px-9 row">
+                    <div class="container text-center mb-2">
+                        <label for="email" class="mb-3 block text-base font-medium text-[#07074D]">
+                            Code:
+                        </label>
+                        <input type="text" name="code" id="code" placeholder="REN"
+                            class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+                    </div>
+                    <div class="container text-center mb-2">
+                        <label for="email" class="mb-3 block text-base font-medium text-[#07074D]">
+                            Name:
+                        </label>
+                        <input type="text" name="name" id="name" placeholder="Renarde"
+                            class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+                    </div>
+                    <div class="container text-center mb-2">
+                        <label for="email" class="mb-3 block text-base font-medium text-[#07074D]">
+                            price:
+                        </label>
+                        <input type="number" name="price" id="price" placeholder="0.0" step="0.10" min="0.0" max="100.0"
+                            class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+                    </div>
+
+                    <div>
+                        <button class="hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-black outline-none" onclick="setPizza()">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="menu3" style="display: none;">
+        </div>
+
+    </main>
+
+</body>
+<script>
+    let showPizza = () => {
+        let menu1 = document.getElementById("menu1");
+        menu1.style.display = "block";
+        let menu2 = document.getElementById("menu2");
+        menu2.style.display = "none";
+        let menu3 = document.getElementById("menu3");
+        menu3.style.display = "none";
+    }
+
+    let showAddPizza = () => {
+        let menu1 = document.getElementById("menu1");
+        menu1.style.display = "none";
+        let menu2 = document.getElementById("menu2");
+        menu2.style.display = "block";
+        let menu3 = document.getElementById("menu3");
+        menu3.style.display = "none";
+    }
+
+    // fetch pizza list on api call /api/pizza
+    let fetchPizza = async () => {
+        let pizzaList = document.getElementById("pizzalist");
+        fetch('/api/pizza')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(pizza => {
+                    pizzaList.innerHTML += `
+                        <tr class="bg-white lg:hover:bg-gray-100 flex lg:table-row flex-row lg:flex-row flex-wrap lg:flex-no-wrap mb-10 lg:mb-0">
+                            <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b block lg:table-cell relative lg:static">
+                                <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Company name</span>
+                                ${pizza.code}
+                            </td>
+                            <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                                <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Country</span>
+                                ${pizza.name}
+                            </td>
+                              <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                                <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Status</span>${pizza.price}
+                              </td>
+                        </tr>
+                        `;
+                });
+            });
+    }
+
+    let setPizza = async () => {
+        let inputCode = document.getElementById("code");
+        let inputName = document.getElementById("name");
+        let inputPrice = document.getElementById("price");
+
+        let pizza = {
+            code: inputCode.value,
+            name: inputName.value,
+            price: inputPrice.value
+        }
+
+        let response = await fetch('/api/setPizza', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(pizza)
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data);
+            });
+
+    }
+
+    fetchPizza();
+
+</script>
+
+</html>
