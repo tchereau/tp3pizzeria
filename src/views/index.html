@@ -34,6 +34,9 @@
                         <th
                             class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">
                             Price</th>
+                        <th
+                            class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">
+                        </th>
                     </tr>
                 </thead>
                 <tbody id="pizzalist">
@@ -41,6 +44,12 @@
             </table>
         </div>
         <div id="menu2" style="display: none;" class="flex">
+            <div class="mx-auto w-full max-w-[550px] bg-white container rounded">
+                <h2
+                    class="text-3xl sm:text-4xl font-extrabold text-slate-900 justify-center text-center tracking-tight dark:text-slate-200">
+                    Add Pizza
+                </h2>
+            </div>
             <div class="mx-auto w-full max-w-[550px] bg-white container rounded">
                 <div class="py-6 px-9 row">
                     <div class="container text-center mb-2">
@@ -66,14 +75,57 @@
                     </div>
 
                     <div>
-                        <button class="hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-black outline-none" onclick="setPizza()">
+                        <button
+                            class="bg-blue-500 hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-black outline-none"
+                            onclick="setPizza()">
                             Add
                         </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="menu3" style="display: none;">
+        <div id="menu3" style="display: none;" class="flex">
+            <div class="mx-auto w-full max-w-[550px] bg-white container rounded">
+                <div class="py-6 px-9 row">
+                    <div class="mx-auto w-full max-w-[550px] bg-white container rounded">
+                        <h2
+                            class="text-3xl sm:text-4xl font-extrabold text-slate-900 justify-center text-center tracking-tight dark:text-slate-200">
+                            Update Pizza
+                        </h2>
+                    </div>
+                    <input type="number" name="upid" id="upid" style="display: none;">
+                    <div class="container text-center mb-2">
+                        <label for="email" class="mb-3 block text-base font-medium text-[#07074D]">
+                            Code:
+                        </label>
+                        <input type="text" name="upcode" id="upcode" placeholder="REN"
+                            class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+                    </div>
+                    <div class="container text-center mb-2">
+                        <label for="email" class="mb-3 block text-base font-medium text-[#07074D]">
+                            Name:
+                        </label>
+                        <input type="text" name="upname" id="upname" placeholder="Renarde"
+                            class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+                    </div>
+                    <div class="container text-center mb-2">
+                        <label for="email" class="mb-3 block text-base font-medium text-[#07074D]">
+                            price:
+                        </label>
+                        <input type="number" name="upprice" id="upprice" placeholder="0.0" step="0.10" min="0.0"
+                            max="100.0"
+                            class="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+                    </div>
+
+                    <div>
+                        <button
+                            class="bg-blue-500 hover:shadow-form w-full rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-black outline-none"
+                            onclick="updatePizza()">
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </main>
@@ -98,9 +150,28 @@
         menu3.style.display = "none";
     }
 
+    let showUpdatePizza = (pizza) => {
+        let menu1 = document.getElementById("menu1");
+        menu1.style.display = "none";
+        let menu2 = document.getElementById("menu2");
+        menu2.style.display = "none";
+        let menu3 = document.getElementById("menu3");
+        menu3.style.display = "block";
+        let upid = document.getElementById("upid");
+        upid.value = pizza.id;
+        let upcode = document.getElementById("upcode");
+        upcode.value = pizza.code;
+        let upname = document.getElementById("upname");
+        upname.value = pizza.name;
+        let upprice = document.getElementById("upprice");
+        upprice.value = pizza.price;
+
+    }
+
     // fetch pizza list on api call /api/pizza
     let fetchPizza = async () => {
         let pizzaList = document.getElementById("pizzalist");
+        pizzaList.innerHTML = "";
         fetch('/api/pizza')
             .then(response => response.json())
             .then(data => {
@@ -115,9 +186,14 @@
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Country</span>
                                 ${pizza.name}
                             </td>
-                              <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                            <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
                                 <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Status</span>${pizza.price}
-                              </td>
+                            </td>
+                            <td class="w-full lg:w-auto p-3 text-gray-800 text-center border border-b text-center block lg:table-cell relative lg:static">
+                                    <span class="lg:hidden absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase">Status</span>
+                                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onclick='showUpdatePizza({id: ${pizza.id}, code:"${pizza.code}", name:"${pizza.name}", price:${pizza.price || 0}})'>Update</button>
+                                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onclick='deletePizza(${pizza.id})'>Delete</button>
+                            </td>
                         </tr>
                         `;
                 });
@@ -146,10 +222,77 @@
                 console.log(data);
             });
 
+        await fetchPizza();
+        let menu1 = document.getElementById("menu1");
+        menu1.style.display = "block";
+        let menu2 = document.getElementById("menu2");
+        menu2.style.display = "none";
+        let menu3 = document.getElementById("menu3");
+        menu3.style.display = "none";
+
+        inputCode.value = null;
+        inputName.value = null;
+        inputPrice.value = null;
     }
 
-    fetchPizza();
+    let updatePizza = async () => {
+        let inputId = document.getElementById("upid");
+        let inputCode = document.getElementById("upcode");
+        let inputName = document.getElementById("upname");
+        let inputPrice = document.getElementById("upprice");
 
+        let pizza = {
+            id: inputId.value,
+            code: inputCode.value,
+            name: inputName.value,
+            price: inputPrice.value
+        }
+
+        let response = await fetch('/api/updatePizza', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(pizza)
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data);
+            });
+
+        await fetchPizza();
+        let menu1 = document.getElementById("menu1");
+        menu1.style.display = "block";
+        let menu2 = document.getElementById("menu2");
+        menu2.style.display = "none";
+        let menu3 = document.getElementById("menu3");
+        menu3.style.display = "none";
+
+        inputId.value = null;
+        inputCode.value = null;
+        inputName.value = null;
+        inputPrice.value = null;
+    }
+
+    let deletePizza = async (id) => {
+        let pizza = {
+            id: id,
+            code: "",
+            name: "",
+            price: 0
+        }
+        await fetch('/api/deletePizza', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(pizza)
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data);
+            });
+        await fetchPizza();
+    }
+    fetchPizza();
 </script>
 
 </html>

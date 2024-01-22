@@ -22,21 +22,39 @@ export class ExpressService {
 
         app.get('/', async (req: Request, res: Response) => {
             this.logs.info(`GET / from ${req.ip}`);
-            let data = await fs.promises.readFile('src/views/index.html', 'utf-8');
-            return res.status(200).send(data);
+            try {
+                let data = await fs.promises.readFile('src/views/index.html', 'utf-8');
+                return res.status(200).send(data);
+            } catch (error) {
+                return res.status(500).json({error: error});
+            }
         });
 
         app.get('/api/pizza', async (req: Request, res: Response) => {
             this.logs.info(`GET /api/pizza from ${req.ip}`);
             let pizzas = this.pizza.OhMyPizza(1);
-            return res.status(200).send(pizzas);
+            return res.status(200).json(pizzas);
         });
 
         app.post('/api/setPizza', async (req: Request, res: Response) => {
             this.logs.info(`POST /api/setPizza from ${req.ip}`);
             let pizza = req.body;
             this.pizza.OhMyPizza(2, pizza);
-            return res.status(200).send(pizza);
+            return res.status(200).json({message: 'Pizza added'});
+        });
+
+        app.post('/api/updatePizza', async (req: Request, res: Response) => {
+            this.logs.info(`POST /api/updatePizza from ${req.ip}`);
+            let pizza = req.body;
+            this.pizza.OhMyPizza(3, pizza);
+            return res.status(200).json({message: 'Pizza updated'});
+        });
+
+        app.post('/api/deletePizza', async (req: Request, res: Response) => {
+            this.logs.info(`POST /api/deletePizza from ${req.ip}`);
+            let pizza = req.body;
+            this.pizza.OhMyPizza(4, pizza);
+            return res.status(200).json({message: 'Pizza deleted'});
         });
 
         
