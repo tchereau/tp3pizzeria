@@ -12,3 +12,8 @@
 
 ``npm run dev``
 
+## TODO
+
+* [] Verify input (if empty, if number, if string, etc.)
+* [] Better error handling
+* [] Rework http response (status code, etc.)
