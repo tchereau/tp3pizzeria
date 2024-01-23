@@ -8,7 +8,7 @@
 npm i
 ```
 
-* rename ``.env.example``into ``.env`` and change port number (otherwise it will be 3000 per default)
+* rename ``.env.example``into ``.env`` and change port number (otherwise it will be 3000 by default)
 
 ## How to run project in dev mode
 
